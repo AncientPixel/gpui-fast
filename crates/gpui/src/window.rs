@@ -5039,6 +5039,7 @@ impl Window {
                 content_mask,
                 tile,
                 opacity,
+                fast_transformation: TransformationMatrix::unit(),
             });
         }
         Ok(())
@@ -5117,7 +5118,7 @@ impl Window {
     ///
     /// The visible region rendered is `bounds.intersect(&image_bounds)`, with `corner_radii`
     /// applied to `bounds`.
-    pub fn paint_image(
+    pub(crate) fn fast_paint_image(
         &mut self,
         bounds: Bounds<Pixels>,
         image_bounds: Bounds<Pixels>,
@@ -5125,6 +5126,7 @@ impl Window {
         data: Arc<RenderImage>,
         frame_index: usize,
         grayscale: bool,
+        fast_transformation: TransformationMatrix,
     ) -> Result<()> {
         self.invalidator.debug_assert_paint();
 
@@ -5211,6 +5213,7 @@ impl Window {
             corner_radii,
             tile: sub_tile,
             opacity,
+            fast_transformation,
         });
         Ok(())
     }

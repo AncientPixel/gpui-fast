@@ -289,6 +289,7 @@ fn hash_primitive(primitive: &Primitive, tile: &Bounds<ScaledPixels>, hasher: &m
             hash_mask(&sprite.content_mask, tile, hasher);
             hash_corners(&sprite.corner_radii, hasher);
             hash_tile(&sprite.tile, hasher);
+            hash_transformation(&sprite.fast_transformation, hasher);
         }
         Primitive::Surface(surface) => {
             // A surface's pixels come from outside the scene; layers never

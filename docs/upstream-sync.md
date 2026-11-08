@@ -141,6 +141,22 @@ unchanged, and a new entry needs as good a reason.
   in a non-composited frame keyed by `u32::MAX`. The private wire format lives
   in `fast::rounded_clip_scene`; Metal, WGPU and Direct3D evaluate the clip
   stack directly without intermediate render targets.
+- Images can be painted turned, scaled or moved by a `TransformationMatrix`,
+  as SVGs already can: `PolychromeSprite` gains `fast_transformation`, and
+  `Window` gains `paint_image_transformed` (`fast::image_transform`), which
+  takes what `paint_image` takes plus the matrix. Upstream has no way to
+  transform anything but glyphs and SVGs. Upstream's `paint_image` is
+  renamed `fast_paint_image` and given the matrix; `paint_image`, which
+  passes the unit matrix, and `paint_image_transformed` are defined in
+  `fast::image_transform` and forward to it. The polychrome sprite shaders
+  (Metal, WGSL with its WebGL loader, HLSL) transform the sprite with the
+  helpers the monochrome sprite already uses, and round its corners against
+  its untransformed position: the vertex shader hands the fragment shader
+  `fast_local_offset`, the untransformed position less the transformed one,
+  which is exactly zero under the unit matrix, so an untransformed image
+  draws the same pixels as upstream's. The sprite grows from 24 words to 30;
+  `gpui_wgpu`'s size assertion for it reads the WebGL loader's stride from
+  the shader (`fast::webgl_strides`), so the two cannot drift apart.
 - `crates/gpui/Cargo.toml` names this repository and sets `publish = false`.
 - The workspace pins Taffy 0.14 where upstream pins 0.13. Taffy 0.13 keeps
   one cached size per kind of constraint, so a node measured under two widths
