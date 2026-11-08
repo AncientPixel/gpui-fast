@@ -25,14 +25,15 @@ use anyhow::Result;
 use crate::{Bounds, Corners, Pixels, RenderImage, TransformationMatrix, Window};
 
 impl Window {
-    /// Paint an image into the scene for the next frame at the current z-index.
-    /// This method will panic if the frame_index is not valid
+    /// Paint an image into `bounds`, positioning and scaling it according to
+    /// `image_bounds`, into the scene for the next frame at the current
+    /// z-index. This method will panic if the frame_index is not valid.
     ///
-    /// This method should only be called as part of the paint phase of element drawing.
-    /// Paint an image into `bounds`, positioning and scaling it according to `image_bounds`.
+    /// The visible region rendered is `bounds.intersect(&image_bounds)`, with
+    /// `corner_radii` applied to `bounds`.
     ///
-    /// The visible region rendered is `bounds.intersect(&image_bounds)`, with `corner_radii`
-    /// applied to `bounds`.
+    /// This method should only be called as part of the paint phase of
+    /// element drawing.
     pub fn paint_image(
         &mut self,
         bounds: Bounds<Pixels>,

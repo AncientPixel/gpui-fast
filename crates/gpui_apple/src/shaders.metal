@@ -703,15 +703,15 @@ vertex PolychromeSpriteVertexOutput polychrome_sprite_vertex(
   float4 clip_distance = distance_from_clip_rect_transformed(unit_vertex, sprite.bounds,
                                                  sprite.content_mask.bounds, sprite.fast_transformation);
   float2 tile_position = to_tile_position(unit_vertex, sprite.tile, atlas_size);
-  float2 fast_p = unit_vertex * float2(sprite.bounds.size.width, sprite.bounds.size.height) + float2(sprite.bounds.origin.x, sprite.bounds.origin.y);
-  TransformationMatrix fast_m = sprite.fast_transformation;
+  float2 fast_position = unit_vertex * float2(sprite.bounds.size.width, sprite.bounds.size.height) + float2(sprite.bounds.origin.x, sprite.bounds.origin.y);
+  TransformationMatrix fast_matrix = sprite.fast_transformation;
   return PolychromeSpriteVertexOutput{
       device_position,
       tile_position,
       sprite_id,
       {clip_distance.x, clip_distance.y, clip_distance.z, clip_distance.w},
-      fast_p - float2(fast_p.x * fast_m.rotation_scale[0][0] + fast_p.y * fast_m.rotation_scale[0][1] + fast_m.translation[0],
-                      fast_p.x * fast_m.rotation_scale[1][0] + fast_p.y * fast_m.rotation_scale[1][1] + fast_m.translation[1])};
+      fast_position - float2(fast_position.x * fast_matrix.rotation_scale[0][0] + fast_position.y * fast_matrix.rotation_scale[0][1] + fast_matrix.translation[0],
+                      fast_position.x * fast_matrix.rotation_scale[1][0] + fast_position.y * fast_matrix.rotation_scale[1][1] + fast_matrix.translation[1])};
 }
 
 fragment float4 polychrome_sprite_fragment(

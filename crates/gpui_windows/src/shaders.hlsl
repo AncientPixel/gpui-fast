@@ -1253,8 +1253,8 @@ PolychromeSpriteVertexOutput polychrome_sprite_vertex(uint vertex_id: SV_VertexI
     output.tile_position = tile_position;
     output.sprite_id = sprite_id;
     output.clip_distance = clip_distance;
-    float2 fast_p = unit_vertex * sprite.bounds.size + sprite.bounds.origin;
-    output.fast_local_offset = fast_p - (mul(fast_p, sprite.fast_transformation.rotation_scale) + sprite.fast_transformation.translation);
+    float2 fast_position = unit_vertex * sprite.bounds.size + sprite.bounds.origin;
+    output.fast_local_offset = fast_position - (mul(fast_position, sprite.fast_transformation.rotation_scale) + sprite.fast_transformation.translation);
     return output;
 }
 

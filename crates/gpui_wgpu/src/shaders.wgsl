@@ -1289,8 +1289,8 @@ fn vs_poly_sprite(@builtin(vertex_index) vertex_id: u32, @builtin(instance_index
     out.position = to_device_position_transformed(unit_vertex, sprite.bounds, sprite.fast_transformation);
     out.tile_position = to_tile_position(unit_vertex, sprite.tile);
     out.sprite_id = instance_id;
-    let fast_p = unit_vertex * vec2<f32>(sprite.bounds.size) + sprite.bounds.origin;
-    out.fast_local_offset = fast_p - (transpose(sprite.fast_transformation.rotation_scale) * fast_p + sprite.fast_transformation.translation);
+    let fast_position = unit_vertex * vec2<f32>(sprite.bounds.size) + sprite.bounds.origin;
+    out.fast_local_offset = fast_position - (transpose(sprite.fast_transformation.rotation_scale) * fast_position + sprite.fast_transformation.translation);
     out.clip_distances = distance_from_clip_rect_transformed(unit_vertex, sprite.bounds, sprite.content_mask, sprite.fast_transformation);
     return out;
 }
